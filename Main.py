@@ -3,8 +3,11 @@ import mysql.connector
 try:  #checks if password and username have been given before
     with open('password.txt','r') as file:
         info = dict(user=file.readline(), passwd=file.readline())
-except FileNotFoundError:
+
+
+except FileNotFoundError:  #if the username and password has not been given yet
     with open('password.txt', 'w') as file:
+
         username = input('enter SQL username: ')
         password = input('enter SQL password: ')
 
@@ -15,13 +18,11 @@ except FileNotFoundError:
             'user': username,
             'passwd': password
         }
-print(info)
 
 db = mysql.connector.connect(
     host="localhost",
     user=info['user'],
     passwd=info['passwd'],
-    db='testdatabase'
 )
 
 mycursor = db.cursor()
