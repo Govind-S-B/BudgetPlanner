@@ -26,4 +26,15 @@ db = mysql.connector.connect(
 )
 
 mycursor = db.cursor()
-print('it fucking worked? what?')
+
+mycursor.execute('show databases')
+
+
+for database in mycursor:
+    if database[0] == 'budget_planner':
+        mycursor.fetchall()  #to clear any extra stuff in the cursor, otherwise we cant execute anything else.
+        break
+else:
+    mycursor.execute('CREATE DATABASE Budget_Planner')
+
+mycursor.execute('USE Budget_Planner')
