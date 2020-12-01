@@ -31,6 +31,6 @@ db = sqlite3.connect(profile)  # creates the .db file
 os.chdir(r'..\\') # Setting Back working dir to project folder
 #-----------------------------------------
 # from here is normal SQL
-mycursor = db.cursor()
+cursor = db.cursor()
 
 
