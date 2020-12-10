@@ -1,5 +1,7 @@
 from DB_funcs import *
 
+set_absolute_path()
+
 if input("add new profile?(y/n)") == 'y':
     profile = input("Enter new profile name to continue: ")
     create_profile(profile)
