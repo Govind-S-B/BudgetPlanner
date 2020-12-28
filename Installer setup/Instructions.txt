@@ -1,0 +1,37 @@
+Instructions for setting up an exe for the application and for creating an installer 
+
+[NOTE: this project works stable only on windows now ,for porting code base must be changed]
+
+PREREQUISITES
+#1 pyinstaller (for compiling .py files into .exe)
+	get pyinstaller via pip (make sure python is in path to avoid all sorts of headaches later on)
+
+	On cmd as admin run : pip install pyinstaller
+
+#2 NSIS (used for making the installer to package resources along with the exe)
+
+	download nsis from https://nsis.sourceforge.io/Download
+
+INSTRUCTIONS
+
+Open cmd in working dir
+type in : pyinstaller --onefile -w --icon=Budget_Planner.ico main.py
+
+after the cmd process is completed ,
+delete build and main.spec from project dir
+move main.exe from dist folder to the project folder (to let the main.exe access the Databases folder and other resources if any like it usually does)
+
+now delete dist folder
+
+rename main.exe as Budget_Planner.exe
+
+_____________________________________________________________
+#Packaging project dir to a NSIS installer
+
+copy the nsi file in the Installer Setup Folder to the project dir
+run the nsi script in project dir (compile using nsis)
+
+
+ADDITIONAL SOURCES:
+src:http://forums.winamp.com/showthread.php?t=197671
+src:https://nsis.sourceforge.io/Sample_installation_script_for_an_application

@@ -1,6 +1,7 @@
-So I have been planning on adding a few more additions , but for now i have cut em off from the main program , if we get excess time, maybe we can add them in
+These are additional notes for the developers , below for now are a few additional capabilities i would like to add to the project if time allows us . But this is left to anyone who works on the code right now
 
-#1 Appdrawer buttons to switch profile 
+
+#1 Appdrawer buttons to switch profile  [DONE]
 
 so clicking on the small button , should load the corresponding database in the first screen (user profile selection)
 
@@ -21,7 +22,7 @@ def self.on_click():
 SOURCE : https://stackoverflow.com/questions/42773709/pyqt5-show-which-button-was-clicked
 
 
-#2 A delete profile and edit profile button
+#2 A delete profile and edit profile button 
 
 so this button will be in the main window , as well as the window in which u land when u choose the profile 
 
@@ -33,7 +34,7 @@ The delete button would just delete the db file , and restart the application
 
 So this will be in the edit window and in the main profile window to the top leftish . it would return u to the main screen 
 
-#4 a restart button along with the min max and close button
+#4 a restart button along with the min max and close button [REJECTED - it seems useless ]
 
 cause ya know there is a f5 shortcut for restart already , so having a restart button wont hurt ig ?
 

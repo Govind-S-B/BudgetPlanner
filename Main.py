@@ -18,7 +18,7 @@ class DBloader():
     db = None
 
     @staticmethod
-    def dblist():
+    def dblist():   # for collecting the list of db files (aka user profies)
         os.chdir(r'.\Databases')
         x = glob.glob('*.db')
         os.chdir(r'..\\')
@@ -26,7 +26,7 @@ class DBloader():
         return x
 
     @staticmethod
-    def dbconnect(profile):
+    def dbconnect(profile): # for loading the db file
         os.chdir(r'.\Databases')
         DBloader.db = sqlite3.connect(profile)
         os.chdir(r'..\\')
@@ -75,7 +75,6 @@ class MainWindow(QMainWindow):
 
 
         #LABEL HOVER
-
         def hover_on(event):
             self.ui.profile_text.setStyleSheet("color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(248, 255, 0, 255), stop:0.702381 rgba(58, 213, 159, 255));")
 
@@ -85,14 +84,17 @@ class MainWindow(QMainWindow):
         self.ui.circle_button.enterEvent = hover_on
         self.ui.circle_button.leaveEvent = hover_off
 
+        # Right and left arrows
         self.ui.next_arrow.clicked.connect(self.next_click)
         self.ui.prev_arrow.clicked.connect(self.prev_click)
 
 
         self.ui.circle_button.clicked.connect(self.profile_click)
 
+        # create new profile button
         self.ui.New_button.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(1))
 
+        # the text field where u enter the new profile name
         self.ui.Profile_name_Field.returnPressed.connect(self.LineEditDone)
 
 
@@ -125,12 +127,12 @@ class MainWindow(QMainWindow):
     def mousePressEvent(self, event):
         self.dragPos = event.globalPos()
 
-    def LineEditDone(self):
+    def LineEditDone(self): # the thing that happens when u press enter after making a new profile
         DBloader.dbconnect(self.ui.Profile_name_Field.text() + ".db")
         self.ui.stackedWidget.setCurrentIndex(2)
 
 
-    def profile_click(self):  # called when the main button is pressed
+    def profile_click(self):  # called when the main big button is pressed
         if len(DBloader.dblist()) == 0:
             self.ui.stackedWidget.setCurrentIndex(1)
         else :
@@ -141,7 +143,7 @@ class MainWindow(QMainWindow):
         if (e.key() == Qt.Key_F5):
             qApp.exit( MainWindow.EXIT_CODE_REBOOT )
 
-    def setIndex(self):
+    def setIndex(self): # responsible for changing stylesheets when the active profile index is updated
         # reverting
         self.ui.app_drawer_layout.itemAt(DBloader.previous_index).widget().setStyleSheet("QPushButton {\n"
     "    border:none;\n"
@@ -167,12 +169,12 @@ class MainWindow(QMainWindow):
     "    \n"
     "}\n")
 
-    def on_click(self):
+    def on_click(self): # responsible for the app drawer effect in mian screen
     	DBloader.previous_index = DBloader.index
     	DBloader.index = self.btn_grp.checkedId()
     	self.setIndex()
 
-    def prev_click(self):
+    def prev_click(self):   # handles the < button in main screen
         if DBloader.index != 0:
             DBloader.previous_index = DBloader.index
             DBloader.index -= 1
@@ -182,7 +184,7 @@ class MainWindow(QMainWindow):
 
         self.setIndex()
 
-    def next_click(self):
+    def next_click(self): # handles the > button in main screen
         if DBloader.index < (len(DBloader.dblist())-1):
             DBloader.previous_index = DBloader.index
             DBloader.index += 1
@@ -193,7 +195,7 @@ class MainWindow(QMainWindow):
         self.setIndex()
 
 
-    def construct_buttons(self,i):
+    def construct_buttons(self,i): # constructs buttons for the app drawer kind of thing
         self.ui.button1 = QtWidgets.QPushButton()
         self.ui.button1.setMaximumSize(QtCore.QSize(9, 9))
         self.ui.button1.setToolTipDuration(-1)
@@ -215,6 +217,17 @@ class MainWindow(QMainWindow):
         self.ui.button1.setCheckable(True)
         self.ui.app_drawer_layout.addWidget(self.ui.button1)
         self.btn_grp.addButton(self.ui.button1,i)
+
+
+
+
+
+
+# EVERYTHING BELOW IS JUST THE APPLICATION CORE , SO MOST PROBABLY
+# YOU DONT WANT TO TOUCH ANYTHING DOWN THERE , UNLESS U NEED TO CHANGE THE CORE FUNCTIONALITY OFC
+
+
+
 
 
 
