@@ -1,0 +1,40 @@
+So I have been planning on adding a few more additions , but for now i have cut em off from the main program , if we get excess time, maybe we can add them in
+
+#1 Appdrawer buttons to switch profile 
+
+so clicking on the small button , should load the corresponding database in the first screen (user profile selection)
+
+This can be implemented by using the buttongroup object
+
+self.btn_grp = QButtonGroup() <- add this before calling the button constructor 
+self.btn_grp.setExclusive(True)
+
+self.btn_grp.addButton(self.button1) <-add this to button constructor function
+
+self.btn_grp.buttonClicked.connect(self.on_click) <- add this to init
+
+def self.on_click():
+	previous index = index
+	index = self.btn_grp.checkedId()
+	setindex() #this is the index update function that we have already made
+
+SOURCE : https://stackoverflow.com/questions/42773709/pyqt5-show-which-button-was-clicked
+
+
+#2 A delete profile and edit profile button
+
+so this button will be in the main window , as well as the window in which u land when u choose the profile 
+
+the edit profile button will open the same text editing window , but there will be two modes like there will be a global variable saying creaation/edit state and state 1 will launch the line edit page in creation mode and state 2 will launch the edit page in edit mode . (after edit it should go to the window which u land when u choose the profile , and load the new db file [the renamed one])
+
+The delete button would just delete the db file , and restart the application
+
+#3 A back button 
+
+So this will be in the edit window and in the main profile window to the top leftish . it would return u to the main screen 
+
+#4 a restart button along with the min max and close button
+
+cause ya know there is a f5 shortcut for restart already , so having a restart button wont hurt ig ?
+
+

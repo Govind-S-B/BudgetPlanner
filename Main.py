@@ -54,8 +54,14 @@ class MainWindow(QMainWindow):
             self.ui.circle_button.setText(DBloader.dblist()[DBloader.index][0].upper())
             self.ui.profile_text.setText(DBloader.dblist()[DBloader.index][0:-3].upper())
 
+            self.btn_grp = QButtonGroup()
+            self.btn_grp.setExclusive(True)
+
+            tempvar = 0 # made for int id for buttons in the app drawer like thing
             for x in DBloader.dblist():
-                self.construct_buttons()
+                self.construct_buttons(tempvar)
+                tempvar += 1
+            del tempvar
 
             self.ui.app_drawer_layout.itemAt(DBloader.index).widget().setStyleSheet("QPushButton {\n"
         "    border:none;\n"
@@ -64,6 +70,8 @@ class MainWindow(QMainWindow):
         "    background-color: rgb(255, 87, 51 );\n"
         "    \n"
         "}\n")
+
+            self.btn_grp.buttonClicked.connect(self.on_click)
 
 
         #LABEL HOVER
@@ -79,6 +87,7 @@ class MainWindow(QMainWindow):
 
         self.ui.next_arrow.clicked.connect(self.next_click)
         self.ui.prev_arrow.clicked.connect(self.prev_click)
+
 
         self.ui.circle_button.clicked.connect(self.profile_click)
 
@@ -112,6 +121,7 @@ class MainWindow(QMainWindow):
 
     ## APP EVENTS
     ########################################################################
+
     def mousePressEvent(self, event):
         self.dragPos = event.globalPos()
 
@@ -157,6 +167,10 @@ class MainWindow(QMainWindow):
     "    \n"
     "}\n")
 
+    def on_click(self):
+    	DBloader.previous_index = DBloader.index
+    	DBloader.index = self.btn_grp.checkedId()
+    	self.setIndex()
 
     def prev_click(self):
         if DBloader.index != 0:
@@ -179,7 +193,7 @@ class MainWindow(QMainWindow):
         self.setIndex()
 
 
-    def construct_buttons(self):
+    def construct_buttons(self,i):
         self.ui.button1 = QtWidgets.QPushButton()
         self.ui.button1.setMaximumSize(QtCore.QSize(9, 9))
         self.ui.button1.setToolTipDuration(-1)
@@ -198,7 +212,10 @@ class MainWindow(QMainWindow):
         self.ui.button1.setText("")
         self.ui.button1.setObjectName("button1")
 
+        self.ui.button1.setCheckable(True)
         self.ui.app_drawer_layout.addWidget(self.ui.button1)
+        self.btn_grp.addButton(self.ui.button1,i)
+
 
 
 
