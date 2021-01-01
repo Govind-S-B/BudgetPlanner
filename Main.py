@@ -1,12 +1,14 @@
-import sqlite3
 import sys
-import os
-import glob
 import platform
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import (QCoreApplication, QPropertyAnimation, QDate, QDateTime, QMetaObject, QObject, QPoint, QRect, QSize, QTime, QUrl, Qt, QEvent)
 from PyQt5.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont, QFontDatabase, QIcon, QKeySequence, QLinearGradient, QPalette, QPainter, QPixmap, QRadialGradient)
 from PyQt5.QtWidgets import *
+
+import sqlite3
+import glob
+import os
 
 from ui_main import Ui_MainWindow # IMPORT GUI FILE
 
@@ -34,6 +36,9 @@ class DBloader():
         print(DBloader.db)
         return DBloader.db
 
+# set HighDPI scaling for application
+QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
+QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
 
 class MainWindow(QMainWindow):
     EXIT_CODE_REBOOT = -123 #restart functionality
@@ -42,6 +47,8 @@ class MainWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.ui = Ui_MainWindow() # so here i think the gui is inside this main window
         self.ui.setupUi(self)
+
+        self.ui.stackedWidget.setCurrentIndex(1)
 
         if len(DBloader.dblist()) == 0:
             self.ui.circle_button.setText("+")
@@ -54,7 +61,7 @@ class MainWindow(QMainWindow):
             self.ui.circle_button.setText(DBloader.dblist()[DBloader.index][0].upper())
             self.ui.profile_text.setText(DBloader.dblist()[DBloader.index][0:-3].upper())
 
-            self.btn_grp = QButtonGroup()
+            self.btn_grp = QButtonGroup() #button group for the app drawer kinda thing
             self.btn_grp.setExclusive(True)
 
             tempvar = 0 # made for int id for buttons in the app drawer like thing
@@ -74,47 +81,30 @@ class MainWindow(QMainWindow):
             self.btn_grp.buttonClicked.connect(self.on_click)
 
 
+        # SET TITLE BAR
+        self.ui.title_bar.mouseMoveEvent = self.moveWindow
+
+        ## ==> SET UI DEFINITIONS
+        UIFunctions.uiDefinitions(self)
+
+
         #LABEL HOVER
-        def hover_on(event):
-            self.ui.profile_text.setStyleSheet("color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(248, 255, 0, 255), stop:0.702381 rgba(58, 213, 159, 255));")
-
-        def hover_off(event):
-            self.ui.profile_text.setStyleSheet("color: rgb(255, 255, 255);")
-
-        self.ui.circle_button.enterEvent = hover_on
-        self.ui.circle_button.leaveEvent = hover_off
+        self.ui.circle_button.enterEvent = self.hover_on
+        self.ui.circle_button.leaveEvent = self.hover_off
 
         # Right and left arrows
         self.ui.next_arrow.clicked.connect(self.next_click)
         self.ui.prev_arrow.clicked.connect(self.prev_click)
 
 
-        self.ui.circle_button.clicked.connect(self.profile_click)
+        self.ui.circle_button.clicked.connect(self.profile_click) #clicking the profile button
+
 
         # create new profile button
         self.ui.New_button.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(1))
 
         # the text field where u enter the new profile name
         self.ui.Profile_name_Field.returnPressed.connect(self.LineEditDone)
-
-
-        # MOVE WINDOW
-        def moveWindow(event):
-            # RESTORE BEFORE MOVE
-            if UIFunctions.returnStatus() == 1:
-                UIFunctions.maximize_restore(self)
-
-            # IF LEFT CLICK MOVE WINDOW
-            if event.buttons() == Qt.LeftButton:
-                self.move(self.pos() + event.globalPos() - self.dragPos)
-                self.dragPos = event.globalPos()
-                event.accept()
-
-        # SET TITLE BAR
-        self.ui.title_bar.mouseMoveEvent = moveWindow
-
-        ## ==> SET UI DEFINITIONS
-        UIFunctions.uiDefinitions(self)
 
 
         ## SHOW ==> MAIN WINDOW
@@ -124,24 +114,53 @@ class MainWindow(QMainWindow):
     ## APP EVENTS
     ########################################################################
 
-    def mousePressEvent(self, event):
+            # MOVE WINDOW
+    def moveWindow(self,event):
+        # RESTORE BEFORE MOVE
+        if UIFunctions.returnStatus() == 1:
+            UIFunctions.maximize_restore(self)
+
+        # IF LEFT CLICK MOVE WINDOW
+        if event.buttons() == Qt.LeftButton:
+            self.move(self.pos() + event.globalPos() - self.dragPos)
+            self.dragPos = event.globalPos()
+            event.accept()
+
+    def mousePressEvent(self, event): # used in the title bar thingy
         self.dragPos = event.globalPos()
 
-    def LineEditDone(self): # the thing that happens when u press enter after making a new profile
-        DBloader.dbconnect(self.ui.Profile_name_Field.text() + ".db")
-        self.ui.stackedWidget.setCurrentIndex(2)
-
-
-    def profile_click(self):  # called when the main big button is pressed
-        if len(DBloader.dblist()) == 0:
-            self.ui.stackedWidget.setCurrentIndex(1)
-        else :
-            DBloader.dbconnect(DBloader.dblist()[DBloader.index])
-            self.ui.stackedWidget.setCurrentIndex(2)
-
-    def keyPressEvent(self,e): #restart
-        if (e.key() == Qt.Key_F5):
+    def keyPressEvent(self,event): #restart
+        if (event.key() == Qt.Key_R) and (QApplication.keyboardModifiers() == Qt.ControlModifier):
             qApp.exit( MainWindow.EXIT_CODE_REBOOT )
+
+    def hover_on(self,event):
+            self.ui.profile_text.setStyleSheet("color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(248, 255, 0, 255), stop:0.702381 rgba(58, 213, 159, 255));")
+
+    def hover_off(self,event):
+            self.ui.profile_text.setStyleSheet("color: rgb(255, 255, 255);")
+
+    def construct_buttons(self,i): # constructs buttons for the app drawer kind of thing
+        self.ui.button1 = QtWidgets.QPushButton()
+        self.ui.button1.setMaximumSize(QtCore.QSize(9, 9))
+        self.ui.button1.setToolTipDuration(-1)
+        self.ui.button1.setStyleSheet("QPushButton {\n"
+    "    border:none;\n"
+    "    border-radius:4px;\n"
+    "    \n"
+    "    background-color: rgba(242, 243, 244,255);\n"
+    "    \n"
+    "}\n"
+    "\n"
+    "QPushButton:hover {\n"
+    "    background-color: rgba(242, 243, 244,150);\n"
+    "    \n"
+    "}")
+        self.ui.button1.setText("")
+        self.ui.button1.setObjectName("button1")
+
+        self.ui.button1.setCheckable(True)
+        self.ui.app_drawer_layout.addWidget(self.ui.button1)
+        self.btn_grp.addButton(self.ui.button1,i)
 
     def setIndex(self): # responsible for changing stylesheets when the active profile index is updated
         # reverting
@@ -169,11 +188,6 @@ class MainWindow(QMainWindow):
     "    \n"
     "}\n")
 
-    def on_click(self): # responsible for the app drawer effect in mian screen
-    	DBloader.previous_index = DBloader.index
-    	DBloader.index = self.btn_grp.checkedId()
-    	self.setIndex()
-
     def prev_click(self):   # handles the < button in main screen
         if DBloader.index != 0:
             DBloader.previous_index = DBloader.index
@@ -194,31 +208,22 @@ class MainWindow(QMainWindow):
 
         self.setIndex()
 
+    def on_click(self): # responsible for the app drawer effect in mian screen
+    	DBloader.previous_index = DBloader.index
+    	DBloader.index = self.btn_grp.checkedId()
+    	self.setIndex()
 
-    def construct_buttons(self,i): # constructs buttons for the app drawer kind of thing
-        self.ui.button1 = QtWidgets.QPushButton()
-        self.ui.button1.setMaximumSize(QtCore.QSize(9, 9))
-        self.ui.button1.setToolTipDuration(-1)
-        self.ui.button1.setStyleSheet("QPushButton {\n"
-    "    border:none;\n"
-    "    border-radius:4px;\n"
-    "    \n"
-    "    background-color: rgba(242, 243, 244,255);\n"
-    "    \n"
-    "}\n"
-    "\n"
-    "QPushButton:hover {\n"
-    "    background-color: rgba(242, 243, 244,150);\n"
-    "    \n"
-    "}")
-        self.ui.button1.setText("")
-        self.ui.button1.setObjectName("button1")
-
-        self.ui.button1.setCheckable(True)
-        self.ui.app_drawer_layout.addWidget(self.ui.button1)
-        self.btn_grp.addButton(self.ui.button1,i)
+    def profile_click(self):  # called when the main big button is pressed
+        if len(DBloader.dblist()) == 0:
+            self.ui.stackedWidget.setCurrentIndex(1)
+        else :
+            DBloader.dbconnect(DBloader.dblist()[DBloader.index])
+            self.ui.stackedWidget.setCurrentIndex(2)
 
 
+    def LineEditDone(self): # the thing that happens when u press enter after making a new profile
+        DBloader.dbconnect(self.ui.Profile_name_Field.text() + ".db")
+        self.ui.stackedWidget.setCurrentIndex(2)
 
 
 
