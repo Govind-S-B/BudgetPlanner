@@ -13,7 +13,7 @@ import os
 from ui_main import Ui_MainWindow # IMPORT GUI FILE
 
 
-class DBloader():
+class DBloader(): # all the db handling functions are inside this class
 
     index = 0
     previous_index = 0 # for reverting changes

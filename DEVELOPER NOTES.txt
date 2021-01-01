@@ -11,40 +11,29 @@ These are additional notes for the developers
 
 #4 Clean code in main.py , organise in order of events happen and windows where buttons or functions are used , order of priority will be 1. General functions and buttons 2. first window(profile choose) 3. second window (edit screen) ... etc
 
+
+
+
+
+
+
 [BUGS]
 
-#1 There seems to be a slight issue with how the buttons appear on screen when system resolution is other than 1366x768 . Havent verified the bug yet , so yeah need to run the program on a range of resolutions and pin point the issue . I have tried looking at issues like this and found a few useful links
-[FIXED]
-https://stackoverflow.com/questions/56974012/qt-designer-how-to-fix-screen-size-disparity
-https://leomoon.com/journal/python/high-dpi-scaling-in-pyqt5/
+#1
+
+
+
+
+
+
 
 [SUGGESTIONS / FEATURES to implement]
 
 below for now are a few additional capabilities i would like to add to the project if time allows us . But this is left to anyone who works on the code right now
 
 
-#1 Appdrawer buttons to switch profile  [DONE]
 
-so clicking on the small button , should load the corresponding database in the first screen (user profile selection)
-
-This can be implemented by using the buttongroup object
-
-self.btn_grp = QButtonGroup() <- add this before calling the button constructor
-self.btn_grp.setExclusive(True)
-
-self.btn_grp.addButton(self.button1) <-add this to button constructor function
-
-self.btn_grp.buttonClicked.connect(self.on_click) <- add this to init
-
-def self.on_click():
-	previous index = index
-	index = self.btn_grp.checkedId()
-	setindex() #this is the index update function that we have already made
-
-SOURCE : https://stackoverflow.com/questions/42773709/pyqt5-show-which-button-was-clicked
-
-
-#2 A delete profile and edit profile button
+#1 A delete profile and edit profile button
 
 so this button will be in the main window , as well as the window in which u land when u choose the profile
 
@@ -52,10 +41,6 @@ the edit profile button will open the same text editing window , but there will 
 
 The delete button would just delete the db file , and restart the application
 
-#3 A back button
+#2 A back button
 
 So this will be in the edit window and in the main profile window to the top leftish . it would return u to the main screen
-
-#4 a restart button along with the min max and close button [REJECTED - it seems useless ]
-
-cause ya know there is a ctrl+r shortcut for restart already , so having a restart button wont hurt ig ?
