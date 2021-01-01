@@ -41,15 +41,16 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
 
 class MainWindow(QMainWindow):
-    EXIT_CODE_REBOOT = -123 #restart functionality
+    EXIT_CODE_REBOOT = -123 #restart functionality (its just a unique value)
 
     def __init__(self):
         QMainWindow.__init__(self)
-        self.ui = Ui_MainWindow() # so here i think the gui is inside this main window
-        self.ui.setupUi(self)
+        self.ui = Ui_MainWindow() # the gui elements inside Ui_MainWindow is now added to this MainWindow
+        self.ui.setupUi(self) # its a built in method to initialize all ui i think
 
-        self.ui.stackedWidget.setCurrentIndex(1)
+        self.ui.stackedWidget.setCurrentIndex(1) # make ths first window the profile choosing window
 
+        # if else , to check if db folder is empty is empty or not and display stuff according to that
         if len(DBloader.dblist()) == 0:
             self.ui.circle_button.setText("+")
             self.ui.profile_text.setText("Please make a new profile")
@@ -57,19 +58,21 @@ class MainWindow(QMainWindow):
             self.ui.next_arrow.hide()
             self.ui.prev_arrow.hide()
         else :
+            # initializing the gui in mainwindow for the first run
             DBloader.index = 0
             self.ui.circle_button.setText(DBloader.dblist()[DBloader.index][0].upper())
             self.ui.profile_text.setText(DBloader.dblist()[DBloader.index][0:-3].upper())
 
-            self.btn_grp = QButtonGroup() #button group for the app drawer kinda thing
-            self.btn_grp.setExclusive(True)
+            self.btn_grp = QButtonGroup() #button group for the app drawer kinda thing , required for the click effect
+            self.btn_grp.setExclusive(True) # layout is used for laying out the elements , group for the click effect
 
-            tempvar = 0 # made for int id for buttons in the app drawer like thing
+            tempvar = 0 # made for int id for buttons in the app drawer like thing inside the group we made above
             for x in DBloader.dblist():
                 self.construct_buttons(tempvar)
                 tempvar += 1
             del tempvar
 
+            # just making the 0th button orange in the app drawer for the first run
             self.ui.app_drawer_layout.itemAt(DBloader.index).widget().setStyleSheet("QPushButton {\n"
         "    border:none;\n"
         "    border-radius:4px;\n"
@@ -78,17 +81,17 @@ class MainWindow(QMainWindow):
         "    \n"
         "}\n")
 
-            self.btn_grp.buttonClicked.connect(self.on_click)
+            self.btn_grp.buttonClicked.connect(self.on_click) # the appdrawer button clicking to change profiles
 
 
         # SET TITLE BAR
-        self.ui.title_bar.mouseMoveEvent = self.moveWindow
+        self.ui.title_bar.mouseMoveEvent = self.moveWindow # also adding the move window feature to the title bar
 
         ## ==> SET UI DEFINITIONS
-        UIFunctions.uiDefinitions(self)
+        UIFunctions.uiDefinitions(self) # sets the other core ui features inside UIFunctions
 
 
-        #LABEL HOVER
+        # event to make hover effect for label from hovering profile button
         self.ui.circle_button.enterEvent = self.hover_on
         self.ui.circle_button.leaveEvent = self.hover_off
 
@@ -131,12 +134,12 @@ class MainWindow(QMainWindow):
 
     def keyPressEvent(self,event): #restart
         if (event.key() == Qt.Key_R) and (QApplication.keyboardModifiers() == Qt.ControlModifier):
-            qApp.exit( MainWindow.EXIT_CODE_REBOOT )
+            qApp.exit( MainWindow.EXIT_CODE_REBOOT ) # passes error code when exiting
 
-    def hover_on(self,event):
+    def hover_on(self,event): # changes the label effect when hovered on main profile button
             self.ui.profile_text.setStyleSheet("color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(248, 255, 0, 255), stop:0.702381 rgba(58, 213, 159, 255));")
 
-    def hover_off(self,event):
+    def hover_off(self,event):  # changes the label effect when hovered on main profile button
             self.ui.profile_text.setStyleSheet("color: rgb(255, 255, 255);")
 
     def construct_buttons(self,i): # constructs buttons for the app drawer kind of thing
@@ -213,7 +216,7 @@ class MainWindow(QMainWindow):
     	DBloader.index = self.btn_grp.checkedId()
     	self.setIndex()
 
-    def profile_click(self):  # called when the main big button is pressed
+    def profile_click(self):  # called when the main big profile button is pressed
         if len(DBloader.dblist()) == 0:
             self.ui.stackedWidget.setCurrentIndex(1)
         else :
@@ -311,9 +314,9 @@ class UIFunctions(MainWindow):
 
 if __name__ == "__main__":
     currentExitCode = MainWindow.EXIT_CODE_REBOOT
-    while currentExitCode == MainWindow.EXIT_CODE_REBOOT:
+    while currentExitCode == MainWindow.EXIT_CODE_REBOOT: # restarts when error code is restart code
         a = QApplication(sys.argv)
         w = MainWindow()
         w.show()
-        currentExitCode = a.exec_()
+        currentExitCode = a.exec_() # error code is given here when ever application closes
         a = None  # delete the QApplication object
