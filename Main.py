@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow() # the gui elements inside Ui_MainWindow is now added to this MainWindow
         self.ui.setupUi(self) # its a built in method to initialize all ui i think
 
-        self.ui.stackedWidget.setCurrentIndex(1) # make ths first window the profile choosing window
+        self.ui.stackedWidget.setCurrentIndex(0) # make ths first window the profile choosing window
 
         # if else , to check if db folder is empty is empty or not and display stuff according to that
         if len(DBloader.dblist()) == 0:
