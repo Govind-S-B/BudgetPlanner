@@ -51,9 +51,9 @@ class MainWindow(QMainWindow):
         self.ui.stackedWidget.setCurrentIndex(0) # make ths first window the profile choosing window
 
         # if else , to check if db folder is empty is empty or not and display stuff according to that
-        if len(DBloader.dblist()) == 0:
+        if len(DBloader.dblist()) == 0:  # if there are no DBs made yet
             self.ui.circle_button.setText("+")
-            self.ui.profile_text.setText("Please make a new profile")
+            self.ui.profile_text.setText("")  # if you want text above the + button
             self.ui.New_button.hide()
             self.ui.next_arrow.hide()
             self.ui.prev_arrow.hide()
