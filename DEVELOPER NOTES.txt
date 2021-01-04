@@ -1,0 +1,46 @@
+These are additional notes for the developers
+
+
+[NOTES / INSTRUCTIONS]
+
+#1 When making the installer or exe for experimental purpose , remember to not include them while adding to commit (just delete the installer and exe , or move them to somewhere else ) . Since the .exe is aout 30Mb and , its something u can compile from any system if u have the source code . So yeah dont add those .exe files to commit . [But if this is the final release or close to that , u can build the exe and add them to commit]
+
+#2 For now this application is not cross platform , it works on windows only . But with some minor changes in code , maybe we can port it for mac and linux . But thats for later
+
+#3 Also when u run the code a _pycache_ folder is created . Just delete that folder . its just useless . Dont add it to commit
+
+#4 Clean code in main.py , organise in order of events happen and windows where buttons or functions are used , order of priority will be 1. General functions and buttons 2. first window(profile choose) 3. second window (edit screen) ... etc
+
+
+
+
+
+
+
+[BUGS]
+
+#1
+
+
+
+
+
+
+
+[SUGGESTIONS / FEATURES to implement]
+
+below for now are a few additional capabilities i would like to add to the project if time allows us . But this is left to anyone who works on the code right now
+
+
+
+#1 A delete profile and edit profile button
+
+so this button will be in the main window , as well as the window in which u land when u choose the profile
+
+the edit profile button will open the same text editing window , but there will be two modes like there will be a global variable saying creaation/edit state and state 1 will launch the line edit page in creation mode and state 2 will launch the edit page in edit mode . (after edit it should go to the window which u land when u choose the profile , and load the new db file [the renamed one])
+
+The delete button would just delete the db file , and restart the application
+
+#2 A back button
+
+So this will be in the edit window and in the main profile window to the top leftish . it would return u to the main screen
