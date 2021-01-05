@@ -47,18 +47,45 @@ class Ui_MainWindow(object):
         self.frame_title.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_title.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_title.setObjectName("frame_title")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frame_title)
-        self.verticalLayout_2.setContentsMargins(15, 0, 0, 0)
-        self.verticalLayout_2.setSpacing(0)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.frame_title)
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.label_back_button = QtWidgets.QPushButton(self.frame_title)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_back_button.sizePolicy().hasHeightForWidth())
+        self.label_back_button.setSizePolicy(sizePolicy)
+        self.label_back_button.setMaximumSize(QtCore.QSize(17, 17))
+        self.label_back_button.setStyleSheet("\n"
+"\n"
+"QPushButton {\n"
+"    color: rgb(255, 255, 255);\n"
+"    border:none;\n"
+"    border-radius:8px;\n"
+"    \n"
+"    background-color:rgb(190, 157, 255);\n"
+"    \n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color:rgb(190, 157, 255,150);\n"
+"    \n"
+"}")
+        self.label_back_button.setObjectName("label_back_button")
+        self.horizontalLayout_8.addWidget(self.label_back_button)
         self.label_title = QtWidgets.QLabel(self.frame_title)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_title.sizePolicy().hasHeightForWidth())
+        self.label_title.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Light")
         font.setPointSize(14)
         self.label_title.setFont(font)
         self.label_title.setStyleSheet("color: rgb(255, 255, 255);")
         self.label_title.setObjectName("label_title")
-        self.verticalLayout_2.addWidget(self.label_title)
+        self.horizontalLayout_8.addWidget(self.label_title)
         self.horizontalLayout.addWidget(self.frame_title)
         self.frame_buttons = QtWidgets.QFrame(self.title_bar)
         self.frame_buttons.setMaximumSize(QtCore.QSize(100, 16777215))
@@ -388,6 +415,8 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.label_back_button.setText(_translate("MainWindow", "<"))
+        self.label_back_button.setShortcut(_translate("MainWindow", "Ctrl+Left"))
         self.label_title.setText(_translate("MainWindow", "Budget Planner"))
         self.bt_minimise.setToolTip(_translate("MainWindow", "Minimise"))
         self.bt_maximise.setToolTip(_translate("MainWindow", "Maximise"))

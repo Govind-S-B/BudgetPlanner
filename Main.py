@@ -48,6 +48,8 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow() # the gui elements inside Ui_MainWindow is now added to this MainWindow
         self.ui.setupUi(self) # its a built in method to initialize all ui i think
 
+        self.previous_window_index = 0 # used for the back button
+
         self.ui.stackedWidget.setCurrentIndex(0) # make ths first window the profile choosing window
 
         # if else , to check if db folder is empty is empty or not and display stuff according to that
@@ -86,6 +88,7 @@ class MainWindow(QMainWindow):
 
         # SET TITLE BAR
         self.ui.title_bar.mouseMoveEvent = self.moveWindow # also adding the move window feature to the title bar
+        self.ui.label_back_button.clicked.connect(lambda : self.ui.stackedWidget.setCurrentIndex(self.previous_window_index))
 
         ## ==> SET UI DEFINITIONS
         UIFunctions.uiDefinitions(self) # sets the other core ui features inside UIFunctions
@@ -104,7 +107,7 @@ class MainWindow(QMainWindow):
 
 
         # create new profile button
-        self.ui.New_button.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(1))
+        self.ui.New_button.clicked.connect(self.New_button_click)
 
         # the text field where u enter the new profile name
         self.ui.Profile_name_Field.returnPressed.connect(self.LineEditDone)
@@ -219,14 +222,20 @@ class MainWindow(QMainWindow):
     def profile_click(self):  # called when the main big profile button is pressed
         if len(DBloader.dblist()) == 0:
             self.ui.stackedWidget.setCurrentIndex(1)
+            self.previous_window_index = 0
         else :
             DBloader.dbconnect(DBloader.dblist()[DBloader.index])
             self.ui.stackedWidget.setCurrentIndex(2)
+            self.previous_window_index = 1
 
+    def New_button_click(self):
+        self.ui.stackedWidget.setCurrentIndex(1)
+        self.previous_window_index = 0
 
     def LineEditDone(self): # the thing that happens when u press enter after making a new profile
         DBloader.dbconnect(self.ui.Profile_name_Field.text() + ".db")
         self.ui.stackedWidget.setCurrentIndex(2)
+        self.previous_window_index = 1
 
 
 
