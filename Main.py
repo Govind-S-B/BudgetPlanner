@@ -313,6 +313,7 @@ class UIFunctions(MainWindow):
 
 
     ## RETURN STATUS IF WINDOWS IS MAXIMIZE OR RESTAURED
+    @staticmethod
     def returnStatus():
         return GLOBAL_STATE
 #_________________________________________________________________________________
