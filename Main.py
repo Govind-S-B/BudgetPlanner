@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import *
 import sqlite3
 import glob
 import os
+import db_funcs
 
 from ui_main import Ui_MainWindow # IMPORT GUI FILE
 
